@@ -416,7 +416,7 @@
                           </div>
                           <div class="form-group">
                           이메일:
-                            <input type="email" class="form-control" value="${sessionScope.login.userEmail }" name="email" required id="bookingUserEmail" autocomplete="off">
+                            <input type="text" class="form-control" value="${sessionScope.login.userEmail }" name="email" required id="bookingEmail" autocomplete="off">
                           </div>
                         </div>
                         
@@ -582,12 +582,10 @@
 	
 	</script>
 	
-    <!-- <script src="/hotel/resources/js/weather.js"></script> -->
-    
-    <script type="text/javascript">
-    
-    $(document).ready(function () {
-	    $("#bookingUserName,#bookingAddr,#bookingTel,#bookingUserEmail,#bookingMessage").click(function () {
+	<script type="text/javascript">
+	
+	$(document).ready(function () {
+	    $("#bookingUserName,#bookingAddr,#bookingTel,#bookingEmail,#bookingMessage").click(function () {
 	        if ('${sessionScope.login.userName}'.length == 0) {
 	            var answer = window.confirm("\n로그인 후 사용가능합니다. \n로그인창으로 이동하시겠습니까?")
 	            if (answer) {
@@ -599,8 +597,10 @@
 	        }
 	    })
 	});
-    
-    </script>
+	
+	</script>
+	
+    <!-- <script src="/hotel/resources/js/weather.js"></script> -->
 
   </body>
   </html>

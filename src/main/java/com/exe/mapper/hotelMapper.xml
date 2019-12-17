@@ -144,5 +144,10 @@ SELECT trunc(to_date(#{checkout},'yyyy/mm/dd'))
 	delete from hotelBooking where bookingId=#{bookingId}
 </delete>
 
+<!--회원가입 -아이디-중복확인 -->
+<select id="idDupCheck" parameterType="String" resultType="int">
+	select nvl(count(*),0) from hotelUser
+	where userId=#{userId}
+</select>
 
 </mapper>
