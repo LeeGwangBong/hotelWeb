@@ -689,7 +689,7 @@
                     
 					<c:if test="${countReview !=0}">
 						<div class="post-comments p-5">
-							<h3 class="post-sub-heading">이벤트 관련 후기 (총:${countReview }개)</h3>
+							<h3 class="post-sub-heading">객실 관련 후기 (총:${countReview }개)</h3>
 							<ul class="media-list comments-list m-bot-50 clearlist">
 							
 								<!-- Comment Item start-->

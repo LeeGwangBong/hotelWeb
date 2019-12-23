@@ -488,7 +488,7 @@ function emailCertify() {
 						</div>
 						<div class="col-lg-7">
 							<div class="form-group">
-								<input name="userId" id="userId" type="text" class="form-control" placeholder="영문 4자리 이상의 아이디를 입력하세요" style="width: 340px;!important;">
+								<input name="userId" id="userId" type="text" class="form-control" placeholder="영문 4자리 이상의 아이디를 입력하세요" autocomplete="off" style="width: 340px;!important;">
 							</div>
 						</div>
 						<div class="col-lg-3" align="right">
@@ -501,7 +501,7 @@ function emailCertify() {
 						<div class="col-lg-10">
 							<div class="form-group">
 							<p class="section-subtitle">이    름</p>
-								<input name="userName" id="userName" type="text" class="form-control" placeholder="2자리 이상의  이름을 입력하세요">
+								<input name="userName" id="userName" type="text" class="form-control" autocomplete="off" placeholder="2자리 이상의  이름을 입력하세요">
 							</div>
 						</div>
 						
@@ -516,7 +516,7 @@ function emailCertify() {
 						<div class="col-lg-10">
 							<div class="form-group">
 							<p class="section-subtitle">비밀번호 확인</p>
-								<input type="password" id="pwCheck" class="form-control"	placeholder="동일한 비밀번호를 재입력하세요">
+								<input type="password" id="pwCheck" class="form-control" placeholder="동일한 비밀번호를 재입력하세요">
 							</div>
 						</div>
 						
@@ -526,7 +526,7 @@ function emailCertify() {
 						</div>
 						<div class="col-lg-7">
 							<div class="form-group">
-								<input name="email" id="email" type="email" class="form-control" placeholder="이메일을 입력하세요" style="width: 340px;!important;">
+								<input name="email" id="email" type="text" class="form-control" placeholder="이메일을 입력하세요" autocomplete="off" style="width: 340px;!important;">
 								<div id="result-check"></div>
 							</div>
 						</div>
@@ -541,7 +541,7 @@ function emailCertify() {
 						<div class="col-lg-10">
 							<div class="form-group">
 							<p class="section-subtitle">생년월일</p>
-								<input name="birth" id="birth" type="date" class="form-control" placeholder="YYYY-MM-DD" autocomplete="off">
+								<input name="birth" id="birth" type="date" class="form-control" placeholder="YYYY-MM-DD" autocomplete="off" autocomplete="off">
 							</div>
 						</div>
 						
@@ -551,7 +551,7 @@ function emailCertify() {
 						</div>
 						<div class="col-lg-7">
 							<div class="form-group">
-								<input name="addr" id="address" type="text" class="form-control" placeholder="주소를 입력해주세요" style="width: 340px;!important;">
+								<input name="addr" id="address" type="text" class="form-control" placeholder="주소를 입력해주세요" autocomplete="off" style="width: 340px;!important;">
 							</div>
 						</div>
 						<div class="col-lg-3" align="right">
@@ -564,7 +564,7 @@ function emailCertify() {
 						<div class="col-lg-10">
 							<div class="form-group">
 							<p class="section-subtitle">휴대전화</p>
-								<input type="tel" name="tel" id="tel" class="form-control" placeholder="010-0000-0000">
+								<input type="text" name="tel" id="tel" class="form-control" placeholder="010-0000-0000" autocomplete="off">
 							</div>
 						</div>
 						

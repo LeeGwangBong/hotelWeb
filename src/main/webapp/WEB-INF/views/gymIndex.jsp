@@ -349,9 +349,9 @@
 						</div>
 						
 						<div class="card-body px-4 ">
-							<span class='post-meta'><i class="ion-ios-location"></i>${dto.addr }</span>
-							<a href="gymList.action" class="mt-3 d-block mb-4 pb-2"><h3>${dto.title }</h3></a>
-							<span class="text-muted"><i class="fa fa-clock"></i>${dto.time }</span>
+							<span class='post-meta'><i class="ion-ios-location"></i> ${dto.addr }</span>
+							<a href="gymList.action" class="mt-3 d-block mb-4 pb-2"><h3> ${dto.title }</h3></a>
+							<span class="text-muted"><i class="fa fa-clock"></i> ${dto.time }</span>
 						</div>
 					</div>						
 				</article>

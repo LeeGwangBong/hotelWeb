@@ -239,14 +239,14 @@
                        
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <input name="userId" type="text" class="form-control" placeholder="아이디">
+                                <input name="userId" type="text" class="form-control" placeholder="아이디" autocomplete="off">
                             </div>
                         </div>
                      </div>
                      <div class="row justify-content-center">   
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <input name="tel" type="text" class="form-control" placeholder="전화번호">
+                                <input name="tel" type="text" class="form-control" placeholder="전화번호" autocomplete="off">
                             </div>
                         </div>
                     </div>

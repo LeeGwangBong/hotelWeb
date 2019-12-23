@@ -196,7 +196,9 @@ public class HotelController {
 	public String login(HttpSession session,HttpServletRequest request) {
 
 		String referer = request.getHeader("Referer");	//접속 경로
-		String main ="http://localhost:8080/hotel/";
+		
+		String main ="/";
+		
 		if(referer!=null&&!referer.equals("")) {
 			request.getSession().setAttribute("redirectURI", referer);
 		}else {
@@ -206,7 +208,7 @@ public class HotelController {
 		return "login";
 		
 	}
-
+	
 	@RequestMapping(value = "/login_ok.action", method = {RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView login_ok(HotelUserDTO dto,HttpServletRequest request,HttpSession session) {
 
@@ -240,14 +242,17 @@ public class HotelController {
 
 		session.setAttribute("login", login);
 		
-		if(redirectURI.equals("http://192.168.16.15:8080/hotel/signup.action") || 
-			redirectURI.equals("http://192.168.16.15:8080/hotel/signupOk.action")) {
+		//회원가입, 회원가입완료, 로그인 페이지에서 로그인 버튼을 눌렀을경우 처리
+		if(redirectURI.contains("signup.action") || 
+			redirectURI.contains("signupOk.action") || 
+			redirectURI.contains("login.action") || 
+			redirectURI.contains("searchPwd.action")) {
 			
 			List<GalleryDTO> lists= galleryDao.getList();
 			
 			request.setAttribute("lists",lists );
 			
-			redirectURI = "http://192.168.16.15:8080/hotel";
+			redirectURI = "/";
 			
 			mav.setView(new RedirectView(redirectURI,true));
 			
@@ -267,7 +272,7 @@ public class HotelController {
 
 		session.removeAttribute("login");
 		
-		if(referer.equals("http://192.168.16.15:8080/hotel/login_ok.action")) {
+		if(referer.contains("login_ok.action")) {
 			
 			return "redirect:/";
 		}

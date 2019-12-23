@@ -140,8 +140,20 @@ function showRequest() {
 		$("#checkout").focus();
 		return false;
 	}
-	
+	/* 
 	if(chkIn[0]>chkout[0]) {
+		alert("\n체크인 날짜보다 이전 날짜를 선택할 수 없습니다");
+		$("#checkout").focus();
+		return false;
+	}
+	 */
+	if(chkIn[2]==chkout[2] && chkIn[0]>chkout[0]) {
+		alert("\n체크인 날짜보다 이전 날짜를 선택할 수 없습니다");
+		$("#checkout").focus();
+		return false;
+	}
+	
+	if(chkIn[2]<chkout[2] && chkIn[0]<chkout[0]) {
 		alert("\n체크인 날짜보다 이전 날짜를 선택할 수 없습니다");
 		$("#checkout").focus();
 		return false;
