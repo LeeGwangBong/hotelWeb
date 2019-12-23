@@ -42,4 +42,12 @@ private SqlSessionTemplate sessionTemplate;
 		
 		sessionTemplate.delete("hotelmapper.deleteUserData",userId);
 	}
+
+	public int idDupCheck(String paramId) {
+		
+		int check =-2;
+		check = sessionTemplate.selectOne("hotelmapper.idDupCheck",paramId);
+		return check;
+		
+	}
 }

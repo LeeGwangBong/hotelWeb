@@ -38,152 +38,320 @@
 <link rel="stylesheet" href="/hotel/resources/css/style.css">
 
 <!-- font -->
-  <link href="https://fonts.googleapis.com/css?family=Gothic+A1:100|Noto+Serif+KR:200&display=swap&subset=korean" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Gothic+A1:100|Noto+Serif+KR:200&display=swap&subset=korean" rel="stylesheet">
   
-	<style type="text/css">
+<style type="text/css">
 	
-	*:not(i){
-		font-family: 'Noto Serif KR', serif!important;
+*:not(i){
+	font-family: 'Noto Serif KR', serif!important;
 	}
 	
-	</style>
-
-<!-- Kakao 톡상담 -->
-<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-
-
-<script type="text/javascript">
-
-function sendIt(){
-	
-	var f = document.myForm;
-	
-	str = f.userId.value;
-	str = str.trim();
-	
-	if(!str){
-		alert("아이디를 입력하세요");
-		f.userId.focus();
-		return;
-	}
-	f.userId.value = str;
-	
-	
-	/* if(f.idDuplication.value != "idCheck") {
-		alert("아이디 중복체크 해주세요.");
-		return;
-	} */
-	
-	str = f.userPwd.value;
-	str = str.trim();
-	
-	if(!str){
-		alert("패스워드를 입력하세요");
-		f.userPwd.focus();
-		return;
-	}
-	/* if(str != f.okPwd.value){
-		alert("패스워드가 일치하지 않습니다");
-		f.okPwd.focus();
-		return;
-	} */
-	f.userPwd.value = str;
-	
-	str = f.userName.value;
-	str = str.trim();
-	
-	if(!str){
-		alert("이름을 입력하세요");
-		f.userName.focus();
-		return;
-	}
-	f.userName.value = str;
-	
-	str = f.birth.value;
-	str = str.trim();
-	
-	if(!str){
-		alert("생일을 입력하세요");
-		f.birth.focus();
-		return;
-	}
-	f.birth.value = str;
-	
-	str = f.tel.value;
-	str = str.trim();
-	
-	if(!str){
-		alert("전화번호를 입력하세요");
-		f.tel.focus();
-		return;
-	}
-	f.tel.value = str;
-	
-	str = f.email.value;
-	str = str.trim();
-    if(!str) {
-        alert("\nE-Mail을 입력하세요. ");
-        f.email.focus();
-        return;
-    }
-	f.email.value = str;
-	
-	
-	
-	f.action = "<%=cp %>/signup_ok.action";
-	f.submit();
+.reg-page {
+    color: #555;
+    padding: 30px;
+    background: #fefefe;
+    border: solid 1px #eee;
+    box-shadow: 0 0 3px #eee;
 }
-<%-- 
-// 아이디 중복체크 화면 open
-function openIdChk() {
-	var f = document.myForm;
-	
-	if(!f.userId.value){
-		alert("아이디를 입력하세요");
-		f.userId.focus();
-		return;
-	}
-	
-	var id = f.userId.value;	
-	url = "<%=cp %>/itwillbook/id_check.do?id="+id;
-	open(url,"chkForm","width=500, height=300, resizable=no, scrollbars=no");
-}
+</style>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-
-function inputIdChk() {
-	document.myForm.idDuplication.value ="idUncheck";
-	// 아이디 value에 값 입력 시 idDuplication.value가 바로 idUnchek로 바뀜
-}
-
- --%>
-</script>
-
-<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<!-- Kakao 톡상담 --><!-- 부트스트랩3 -->
+	<script src="/hotel/resources/plugins/jquery/jquery.js"></script>
+	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+	<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
 	<script type="text/javascript">
-
 		function openDaumZipAddress() {
-
 			new daum.Postcode({
-
 				oncomplete:function(data) {
-
 					jQuery("#address").val(data.address);
-
 					jQuery("#address").focus();
-
+					$("#address").addClass("form-control is-valid");
 					console.log(data);
 				}
 			}).open();
 		}
-
 	</script>
+
+<!-- 이메일 형식 체크 JS  -->
+<script type="text/javascript">
+	
+//이메일 형식체크
+function email_check( email ) {    
+	    var regex=/([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+	    return (email != '' && email != 'undefined' && regex.test(email)); 
+	}
+
+// check when email input lost foucus
+$(document).ready(function() {
+	$("#email").blur(function(){
+	  var email = $(this).val();
+	  // if value is empty then exit
+	  if( email == '' || email == 'undefined') return;
+
+	  // valid check
+	  if(! email_check(email) ) {
+	  	$("#result-check").text('유효하지 않은 이메일 형식입니다');
+	  	$("#email").removeClass("form-control is-valid");
+		$("#email").addClass("form-control is-invalid");		
+	    $(this).focus();
+	    return false;
+	  }
+	  else {
+	  	$("#result-check").text('이메일 형식이 일치합니다.');
+	  	$("#email").removeClass("form-control is-invalid");
+		$("#email").addClass("form-control is-valid");	
+	  	
+	  }
+	});
+});
+</script>
+
+<script type="text/javascript">
+
+//UserId 중복체크를 위한 변수, 중복되지 않을경우 값이 저장됨
+var checkedId= ""; 
+
+$(document).ready(function() {
+	
+	//아이디
+	$("#userId").focus(function() {
+		$("#userId").keyup(function() {
+			if(checkedId!=""){
+				if(checkedId != $("#userId").val())
+					$("#userId").removeClass("form-control is-valid");
+					$("#userId").addClass("form-control is-invalid");
+			}				
+			if ($("#userId").val().length >= 4) {
+				$("#idDupCheck").removeClass("disabled");
+			}else {
+				$("#idDupCheck").addClass("disabled");
+			}
+		});	
+	});
+
+	// 비밀번호
+	$("#password").focus(function() {
+		$("#password").keyup(function() {
+			if ($("#password").val().length >= 8) {
+				$("#password").removeClass("form-control is-invalid");
+				$("#password").addClass("form-control is-valid");	
+			} else {
+				$("#password").removeClass("form-control is-valid");
+				$("#password").addClass("form-control is-invalid");
+			}
+		});
+	});
+
+	// 비밀번호 재확인
+	$("#pwCheck").focus(function() {	
+		$("#pwCheck").keyup(function() {
+			if ($("#pwCheck").val() == $("#password").val()) {
+				$("#pwCheck").removeClass("form-control is-invalid");
+				$("#pwCheck").addClass("form-control is-valid");
+			} else {
+				$("#pwCheck").removeClass("form-control is-valid");
+				$("#pwCheck").addClass("form-control is-invalid");	
+			}
+		});
+	});
+
+	// 이름
+	$("#userName").focus(function() {
+		$("#userName").keyup(function() {
+			if ($("#userName").val().length > 1) {
+				$("#userName").removeClass("form-control is-invalid");
+				$("#userName").addClass("form-control is-valid");
+			} else {
+				$("#userName").removeClass("form-control is-valid");
+				$("#userName").addClass("form-control is-invalid");
+			}
+		});
+	});
+
+	// 생년월일
+	$("#birth").focus(function() {
+		$("#birth").keyup(function() {
+			if ($("#birth").val().length > 0) {
+				$("#birth").removeClass("form-control is-invalid");
+				$("#birth").addClass("form-control is-valid");
+			} else {
+				$("#birth").removeClass("form-control is-valid");
+				$("#birth").addClass("form-control is-invalid");
+			}
+		});
+	});
+	// 비밀번호
+	$("#address").focus(function() {
+		$("#address").keyup(function() {
+			if ($("#address").val().length >= 1) {
+				$("#address").removeClass("form-control is-invalid");
+				$("#address").addClass("form-control is-valid");	
+			} else {
+				$("#address").removeClass("form-control is-valid");
+				$("#address").addClass("form-control is-invalid");
+			}
+		});
+	});
+
+	// 휴대전화
+	$("#tel").focus(function() {
+		$("#tel").keyup(function() {
+			if ($("#tel").val().length == 13 ) {
+				$("#tel").removeClass("form-control is-invalid");
+				$("#tel").addClass("form-control is-valid");
+			} else {
+				$("#tel").removeClass("form-control is-valid");
+				$("#tel").addClass("form-control is-invalid");
+			}
+		});
+	});
+
+})
+
+// 회원가입 버튼 클릭시 유효성 검사
+function sendIt() {
+		alert("sendIt 들어옴")
+	var f = document.myForm;
+	if ($("#userId").val() == "") {
+		alert("아이디를 입력하세요");
+		$("#userId").focus();
+		return;
+	}
+	if ($("#userId").val().length < 4) {
+		alert("아이디가 4자리 이상이어야 합니다");
+		$("#userId").focus();
+		return;
+	}
+	if ($("#password").val() == "") {
+		alert("비밀번호를 입력하세요");
+		$("#password").focus();
+		return;
+	}
+	if ($("#password").val().length < 8) {
+		alert("비밀번호가 8자리 이상이어야 합니다");
+		$("#password").val("");
+		$("#password").focus();
+		return;
+	}
+	if ($("#password").val() != $("#pwCheck").val()) {
+		alert("비밀번호 재확인이 맞지않습니다");
+		$("#pwCheck").val("");
+		$("#pwCheck").focus();
+		return;
+	}
+	if ($("#name").val() == "") {
+		alert("이름을 입력하세요");
+		$("#name").focus();
+		return;
+	}
+
+	if ($("#birth").val() == "") {
+		alert("생년월일을 입력하세요");
+		$("#birth").focus();
+		return;
+	}
+
+	if ($("#email").val() == "") {
+		alert("이메일을 입력하세요");
+		$("#email").focus();
+		return;
+	}
+
+	if ($("#tel").val() == "") {
+		alert("휴대 전화번호를 입력하세요");
+		$("#tel").focus();
+		return;
+	}
+
+	f.action = "<%=cp %>/signup_ok.action";
+	f.submit();
+}
+
+// 아이디 중복 체크
+function idDupCheck() {
+	if ($("#userId").val() == "") {
+		alert("아이디를 입력해주세요");
+		$("#userId").focus();
+		return;
+	}
+	if ($("#userId").val().length < 4) {
+		alert("아이디가 4자리 이상이어야 합니다");
+		$("#userId").focus();
+		return;
+	}
+
+	if (confirm($("#userId").val() + " 아이디로 중복 확인 하시겠습니까?")) {
+		// 중복확인 요청
+		$.ajax({
+			url : "idDupCheck.action",
+			type : "GET",
+			data : {
+				paramId : $("#userId").val()
+			},
+			dataType : "text",
+			success : function(data) {
+				
+				if(data!="" && data!=0){
+				checkedId = data;
+				}
+				
+				$("#userId").val(data);
+				if ($("#userId").val().length == 0) {
+					alert("중복된 아이디입니다. 다시 입력해주세요");
+					$("#userId").removeClass("form-control is-valid");
+					$("#userId").addClass("form-control is-invalid");
+					$("#userId").focus();
+					
+				} else {
+					alert("사용 가능한 아이디입니다. 다음 단계를 진행하세요");
+					$("#userId").removeClass("form-control is-invalid");
+					$("#userId").addClass("form-control is-valid");
+					$("#password").focus().setValue="";
+					
+				}
+			}
+		});
+
+	} else {
+		$("#userId").focus();
+		return;
+	}
+
+}
+// 이메일 인증
+function emailCertify() {
+	if ($("#email").val() == "") {
+		alert("이메일을 입력해주세요");
+		$("#email").focus();
+		return;
+	}
+
+	if (confirm($("#email").val() + " 로 이메일 인증을 보내시겠습니까?")) {
+		// 인증 요청
+		$.ajax({
+			url : "signUpForm/emailCertify",
+			type : "GET",
+			data : {
+				paramEmail : $("#email").val()
+			},
+			dataType : "text",
+			success : function(data) {
+				$("#active_key").val(data);
+			}
+		});
+	}
+}
+</script>
+
+<script type="text/JavaScript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
 </head>
 <body>
-
 	<!-- Header Start -->
-	
 <header class="navigation">
 <div class="top-header py-2">
 	<div class="container">
@@ -308,66 +476,99 @@ function inputIdChk() {
 					<span class="section-border"></span>
 				</div>
 			</div>
-			<!-- .col-md-7 close -->
 		</div>
-
 		<div class="row justify-content-center">
 			<div class="col-lg-7 col-sm-12">
-			
-				<form action="javascript:sendIt();" name="myForm" method="post">
+				<form action="javascript:sendIt();" name="myForm" method="post" class="reg-page">
 					<div class="row justify-content-center">
-
-						<div class="col-lg-10">
-							<div class="form-group">
-							<p class="section-subtitle">아 이 디 </p>
-								<input name="userId" type="text" class="form-control" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-lg-10">
-							<div class="form-group">
-							<p class="section-subtitle">이    름</p>
-								<input name="userName" type="text" class="form-control" autocomplete="off">
-							</div>
-						</div>
-						<div class="col-lg-10">
-							<div class="form-group">
-							<p class="section-subtitle">비 밀 번 호</p>
-								<input name="userPwd" type="password" class="form-control"	>
-							</div>
-						</div>
-						<div class="col-lg-10">
-							<div class="form-group">
-							<p class="section-subtitle">이 메 일</p>
-								<input name="email" type="text" class="form-control" placeholder="" autocomplete="off">
-							</div>
-						</div>
-
-						<div class="col-lg-10">
-							<div class="form-group">
-							<p class="section-subtitle">생 년 월 일</p>
-								<input name="birth" type="text" class="form-control" placeholder="YYYY-MM-DD" autocomplete="off">
-							</div>
+						
+						<!-- 아이디 중복검사 -->
+						<div class="col-lg-7">
+							<p class="section-subtitle">아이디</p>
 						</div>
 						<div class="col-lg-7">
 							<div class="form-group">
-							<p class="section-subtitle">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;주    소</p>
-								<input name="addr" id="address" type="text" class="form-control" placeholder="주소를 입력해주세요" autocomplete="off">
+								<input name="userId" id="userId" type="text" class="form-control" placeholder="영문 4자리 이상의 아이디를 입력하세요" style="width: 340px;!important;">
 							</div>
 						</div>
-						<div class="col-lg-3">
+						<div class="col-lg-3" align="right">
 							<div class="form-group">
-								<p class="section-subtitle">&nbsp;</p>
+								<span id="idDupCheck" onclick="idDupCheck();" class="btn btn-main">중복확인</span>
+							</div>
+						</div>
+						
+						 <!-- 이름 -->
+						<div class="col-lg-10">
+							<div class="form-group">
+							<p class="section-subtitle">이    름</p>
+								<input name="userName" id="userName" type="text" class="form-control" placeholder="2자리 이상의  이름을 입력하세요">
+							</div>
+						</div>
+						
+						<!-- 비밀번호 -->
+						<div class="col-lg-10">
+							<div class="form-group" id="pwInputGroup">
+							<p class="section-subtitle">비밀번호</p>
+								<input type="password" id="password" name="userPwd" class="form-control" placeholder="8자리 이상의 비밀번호를 입력하세요">
+							</div>
+						</div>
+						<!-- 비밀번호 재검사 -->
+						<div class="col-lg-10">
+							<div class="form-group">
+							<p class="section-subtitle">비밀번호 확인</p>
+								<input type="password" id="pwCheck" class="form-control"	placeholder="동일한 비밀번호를 재입력하세요">
+							</div>
+						</div>
+						
+						<!-- 이메일 중복검사 -->
+						<div class="col-lg-7">
+							<p class="section-subtitle">이메일</p>
+						</div>
+						<div class="col-lg-7">
+							<div class="form-group">
+								<input name="email" id="email" type="email" class="form-control" placeholder="이메일을 입력하세요" style="width: 340px;!important;">
+								<div id="result-check"></div>
+							</div>
+						</div>
+						<div class="col-lg-3" align="right">
+							<div class="form-group">
+								<span onclick="emailCertify()" class="btn btn-main">인증확인</span>
+								<input id="active_key" name="active_key" type="hidden"></input>
+							</div>
+						</div>
+						
+						<!-- 생년월일 -->
+						<div class="col-lg-10">
+							<div class="form-group">
+							<p class="section-subtitle">생년월일</p>
+								<input name="birth" id="birth" type="date" class="form-control" placeholder="YYYY-MM-DD" autocomplete="off">
+							</div>
+						</div>
+						
+						<!-- 주소검색 및 직접입력 -->
+						<div class="col-lg-7">
+							<p class="section-subtitle">주소</p>
+						</div>
+						<div class="col-lg-7">
+							<div class="form-group">
+								<input name="addr" id="address" type="text" class="form-control" placeholder="주소를 입력해주세요" style="width: 340px;!important;">
+							</div>
+						</div>
+						<div class="col-lg-3" align="right">
+							<div class="form-group">
 								<input type="button" class="btn btn-main" value="주소찾기" onclick="openDaumZipAddress();">
 							</div>
 						</div>
+						
+						<!-- 전화번호 입력 -->
 						<div class="col-lg-10">
 							<div class="form-group">
-							<p class="section-subtitle">휴 대 전 화</p>
-								<input name="tel" type="text" class="form-control"	placeholder="전화번호 입력" autocomplete="off">
+							<p class="section-subtitle">휴대전화</p>
+								<input type="tel" name="tel" id="tel" class="form-control" placeholder="010-0000-0000">
 							</div>
 						</div>
+						
 							<input type="submit" class="btn btn-main" value="회 원 가 입" >
-							<!-- <button class="btn btn-main" type="submit" onclick="sendIt();">회 원 가 입</button> -->
 					
 					</div>
 
@@ -484,7 +685,7 @@ function inputIdChk() {
 
 
 	<!-- Main jQuery -->
-	<script src="/hotel/resources/plugins/jquery/jquery.js"></script>
+	
 	<!-- Bootstrap 3.1 -->
 	<script src="/hotel/resources/plugins/bootstrap/js/bootstrap.min.js"></script>
 	<!-- Owl Carousel -->

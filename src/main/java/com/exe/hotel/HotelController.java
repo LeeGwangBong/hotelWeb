@@ -16,14 +16,19 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,6 +56,8 @@ import com.exe.dto.LoginDTO;
 import com.exe.dto.ReviewDTO;
 import com.exe.dto.RoomDTO;
 import com.exe.dto.SpaDTO;
+import com.exe.hotel.mail.MailAuthKeyGenerator;
+import com.exe.hotel.mail.MailHandler;
 
 @Controller
 public class HotelController {
@@ -75,7 +82,6 @@ public class HotelController {
 //	@Qualifier("eventReviewDAO")
 	EventReviewDAO eventReviewDAO;
 
-
 	@Autowired
 	RoomDAO rdao;
 
@@ -85,6 +91,8 @@ public class HotelController {
 	@Autowired
 	SpaDAO spaDAO;
 	
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	@RequestMapping(value = "/", method = {RequestMethod.GET,RequestMethod.POST})
 	public String index(HttpServletRequest request) {
@@ -100,17 +108,69 @@ public class HotelController {
 	public String indexImage(HttpServletRequest request) {
 
 		return "indexImage";
+		
+		
 	}
+	
+	//id중복 체크
+	@RequestMapping(value = "/idDupCheck.action", 
+			method = {RequestMethod.GET,RequestMethod.POST})
+	public @ResponseBody String idDupCheck(
+			@RequestParam String paramId) 
+					throws Exception{
+		
+		int result = -1;
+		String checkedId = "";
+		// 검색 후, 0이면 사용가능, 1이면 중복, -1이면 메서드 작동X, -2이면 SQL 작동X
+		result = userDao.idDupCheck(paramId);
+		
+		if(result == 0) {
+			checkedId = paramId;
+		}else if(result == 1) {
+			checkedId = "";
+		}else {
+			checkedId = "";
+		}
+		return checkedId;
+	}
+	
+	//이메일 인증 
+	@RequestMapping("signUpForm/emailCertify")
+	public @ResponseBody String responseEmailCertify(@RequestParam String paramEmail) throws Exception {
+		System.out.println("인증메일 전송 주소: " + paramEmail);
 
+		// 인증 키 생성
+		String random_24_string = new MailAuthKeyGenerator().excuteGenerate();
+		System.out.println("active_key 값: " + random_24_string);
+
+		// 인증 키 유저에게 메일 보내기(get)
+		MailHandler sendMail = new MailHandler(mailSender);
+		sendMail.setSubject("[it Hotel 회원가입 이메일 인증 메일입니다 ]");
+		sendMail.setText(new StringBuffer().append("<h1>이메일 인증을 진행해주세요</h1>").append("<h1><a href='http://localhost:8080/hotel/emailActivate?u_email=")
+				.append(paramEmail).append("&u_email_active_key=").append(random_24_string).append("' target='_blank'>이메일 인증 링크입니다</a></h1>").toString());
+		sendMail.setFrom("peterjangyoungsub", "it hotel");
+		sendMail.setTo(paramEmail);
+		sendMail.send();
+		
+		return random_24_string;
+	}
+	
+	
+	@RequestMapping("emailActivate")
+	public String responseEmailActivate(@RequestParam HashMap<String, Object> params) throws Exception {
+		
+		JOptionPane.showMessageDialog(null, "아이디 이용이 가능합니다");
+		
+		return "redirect:/login.action";
+		
+	}
 
 	//회원가입
 	@RequestMapping(value = "/signup.action", method = {RequestMethod.GET,RequestMethod.POST})
 	public ModelAndView signUp() {
 
 		ModelAndView mav = new ModelAndView();
-
 		mav.setViewName("signup");
-
 		return mav;
 	}
 
@@ -118,6 +178,7 @@ public class HotelController {
 	@RequestMapping(value = "/signup_ok.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String signup_ok(HotelUserDTO dto, HttpServletRequest req, HttpServletResponse res) {
 
+		
 		userDao.insertUser(dto);
 
 		return "redirect:/signupOk.action";
@@ -126,7 +187,7 @@ public class HotelController {
 	// 가입 완료되었다고 보여주는 메세지- 로그인버튼 있음
 	@RequestMapping(value = "/signupOk.action", method = { RequestMethod.GET, RequestMethod.POST })
 	public String signupOk(HttpSession session) {
-
+		
 		return "signupOk";
 	}
 
@@ -135,10 +196,15 @@ public class HotelController {
 	public String login(HttpSession session,HttpServletRequest request) {
 
 		String referer = request.getHeader("Referer");	//접속 경로
-
-		request.getSession().setAttribute("redirectURI", referer);
-
+		String main ="http://localhost:8080/hotel/";
+		if(referer!=null&&!referer.equals("")) {
+			request.getSession().setAttribute("redirectURI", referer);
+		}else {
+			//로그인 완료후 다시 로그인창으로 복귀 방지!! main index로 연결해준다.
+			request.getSession().setAttribute("redirectURI", main);
+		}
 		return "login";
+		
 	}
 
 	@RequestMapping(value = "/login_ok.action", method = {RequestMethod.GET,RequestMethod.POST})
