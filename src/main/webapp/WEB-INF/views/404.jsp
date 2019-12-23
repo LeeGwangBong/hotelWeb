@@ -178,9 +178,7 @@
 		<div class="row justify-content-center">
 			<div class="col-lg-6 text-center">
 				<h2>Page Not Found!</h2>
-
 				<p class="mt-3 mb-5">Sorry, We couldn't find the page you're looking for.</p>
-
 				<a href="/hotel" class="btn btn-main">Homepage </a>
 			</div>
 		</div>
